@@ -1,10 +1,23 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import React, {useCallback, useState} from 'react'
+import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import anemometer from '../../data/anemometers/list.json'
 import station1 from '../../data/anemometers/detail/1.json'
 import station2 from '../../data/anemometers/detail/2.json'
 import station3 from '../../data/anemometers/detail/3.json'
+import Drawer from '@mui/material/Drawer';
+import MapDetails from "../MapDetails";
+
 
 export default function Map(){
+    const [openDrawer, setOpenDrawer] = React.useState(false);
+    const [markerSelected, setMarkerSelected] = React.useState(0);
+    const [listStation] = useState([station1, station2, station3]);
+
+    const handleChange = useCallback((index: number) => {
+        setOpenDrawer(!openDrawer)
+        setMarkerSelected(index)
+    }, [openDrawer])
+
     return(
         <MapContainer center={[19.5938015, -155.4283701]} zoom={7} scrollWheelZoom={false}>
             <TileLayer
@@ -12,13 +25,24 @@ export default function Map(){
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {
-                anemometer.map((anemometer:Anemometer) => {
-                    const station = anemometer.id === 1 ? station1 : anemometer.id === 2 ? station2 : station3
+                anemometer.map((anemometer:Anemometer, index:number) => {
                     return(
-                        <Marker key={anemometer.id} position={[anemometer.loc.lat, anemometer.loc.long]}>
-                            <Popup>
-                                {station.name}
-                            </Popup>
+                        <Marker
+                            key={anemometer.id}
+                            position={[anemometer.loc.lat, anemometer.loc.long]}
+                            eventHandlers={{
+                                click: () => {
+                                    handleChange(index)
+                                }
+                            }}
+                        >
+                            <Drawer
+                                anchor={'bottom'}
+                                open={openDrawer}
+                                onClose={() => setOpenDrawer(false)}
+                            >
+                                <MapDetails stationDetail={listStation[markerSelected]}/>
+                            </Drawer>
                         </Marker>
                     )
                 })
