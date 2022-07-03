@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react'
+import React, {useState} from 'react'
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import anemometer from '../../data/anemometers/list.json'
 import station1 from '../../data/anemometers/detail/1.json'
@@ -9,14 +9,15 @@ import MapDetails from "../MapDetails";
 
 
 export default function Map(){
-    const [openDrawer, setOpenDrawer] = React.useState(false);
-    const [markerSelected, setMarkerSelected] = React.useState(0);
-    const [listStation] = useState([station1, station2, station3]);
+    const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+    const [markerSelected, setMarkerSelected] = useState<number>(0);
+    const [listStation] = useState<Anemometer[]>([station1, station2, station3]);
 
-    const handleChange = useCallback((index: number) => {
+
+    const handleChange = (index: number) => {
         setOpenDrawer(!openDrawer)
         setMarkerSelected(index)
-    }, [openDrawer])
+    }
 
     return(
         <MapContainer center={[19.5938015, -155.4283701]} zoom={7} scrollWheelZoom={false}>
@@ -25,7 +26,7 @@ export default function Map(){
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {
-                anemometer.map((anemometer:Anemometer, index:number) => {
+                anemometer?.map((anemometer:Anemometer, index:number) => {
                     return(
                         <Marker
                             key={anemometer.id}

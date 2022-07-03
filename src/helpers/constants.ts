@@ -1,0 +1,1 @@
+export const WIND_DIRECTION_NAMES = ['Northerly', 'North Easterly', 'Easterly', 'South Easterly', 'Southerly', 'South Westerly', 'Westerly', 'North Westerly'];

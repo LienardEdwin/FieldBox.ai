@@ -1,35 +1,27 @@
 type Anemometer = {
-    id: number;
-    name: string;
+    id: number
+    name: string
     loc: {
-        lat: number;
-        long: number;
+        lat: number
+        long: number
+    },
+    statistics?: Statistics
+    readings?: Readings[]
+}
+type Statistics = {
+    average: {
+        daily: {
+            force: number
+        },
+        weekly: {
+            force: number
+        }
     }
 }
 
-type AnemometerDetail ={
-    id?: number;
-    name?: string;
-    loc?: {
-        lat?: number;
-        long?: number;
-    },
-    statistics?: {
-        average: {
-            daily?: {
-                force?: number
-            },
-            weekly?: {
-                force?: number
-            }
-        }
-    },
-    readings?: [
-        {
-            timestamp?: string,
-            force?: number,
-            dir?: number
-        },
-
-    ]
+type Readings = {
+    timestamp: string
+    force: number
+    dir: number
 }
+
