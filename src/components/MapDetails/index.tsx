@@ -10,6 +10,10 @@ import Paper from '@mui/material/Paper';
 import {Typography} from "@mui/material";
 import { makeStyles } from '@mui/styles';
 import { windDirection} from "../../helpers/windDirection";
+import LineChart from '../LineChart';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Grid from '@mui/material/Grid';
 import moment from 'moment'
 
 const useStyles = makeStyles({
@@ -20,14 +24,24 @@ const useStyles = makeStyles({
 
 type Props = {
     stationDetail: Anemometer
+    onClose: () => void
 }
 
-export default function MapDetails({stationDetail}: Props) {
+export default function MapDetails({stationDetail, onClose}: Props) {
     const classes = useStyles();
 
     return(
         <>
-            <Typography variant={'h5'} className={classes.margin}>{stationDetail?.name}</Typography>
+            <Grid container alignItems={'center'} justifyContent={'space-between'}>
+                <Grid item>
+                    <Typography variant={'h5'} className={classes.margin}>{stationDetail?.name}</Typography>
+                </Grid>
+                <Grid item>
+                    <IconButton aria-label="delete" onClick={onClose}>
+                        <CloseIcon />
+                    </IconButton>
+                </Grid>
+            </Grid>
             <Divider/>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -40,7 +54,7 @@ export default function MapDetails({stationDetail}: Props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {stationDetail?.readings?.map((reading:any, index:number) => (
+                        {stationDetail?.readings?.map((reading:Readings, index:number) => (
                             <TableRow
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -56,6 +70,18 @@ export default function MapDetails({stationDetail}: Props) {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Divider/>
+            {
+                stationDetail.readings && (
+                    <>
+                        <Typography variant={'h5'} className={classes.margin}>Evolution</Typography>
+                        <div>
+                            <LineChart wind={stationDetail.readings}/>
+                        </div>
+
+                    </>
+                )
+            }
         </>
 
     )

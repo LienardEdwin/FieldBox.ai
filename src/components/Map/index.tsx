@@ -19,6 +19,10 @@ export default function Map(){
         setMarkerSelected(index)
     }
 
+    const handleClose = () =>{
+        setOpenDrawer(false)
+    }
+
     return(
         <MapContainer center={[19.5938015, -155.4283701]} zoom={7} scrollWheelZoom={false}>
             <TileLayer
@@ -42,7 +46,7 @@ export default function Map(){
                                 open={openDrawer}
                                 onClose={() => setOpenDrawer(false)}
                             >
-                                <MapDetails stationDetail={listStation[markerSelected]}/>
+                                <MapDetails stationDetail={listStation[markerSelected]} onClose={handleClose}/>
                             </Drawer>
                         </Marker>
                     )
